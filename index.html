@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Karthik Marimuthu — MLOps</title>
+<meta name="description" content="Karthik Marimuthu — MLOps engineer. CI/CD/CT pipelines, model registries, serving, drift monitoring, and bank-grade ML infrastructure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --ground:#0E1420; --surface:#18202F; --surface-2:#1F2939;
+    --line:#2A3547; --text:#E8ECF4; --muted:#8A94A8;
+    --accent:#5AB0FF; --accent-dim:#2E5F8F;
+    --ok:#3ECF8E; --warn:#F0B25A;
+    --display:"Bricolage Grotesque",Georgia,serif;
+    --body:"IBM Plex Sans",-apple-system,Segoe UI,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--ground);color:var(--text);
+    font:400 16px/1.65 var(--body);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover,a:focus-visible{text-decoration:underline}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+
+  /* ---------- header ---------- */
+  header{border-bottom:1px solid var(--line)}
+  .bar{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+  .brand{font-family:var(--mono);font-size:14px;color:var(--muted)}
+  .brand b{color:var(--text);font-weight:500}
+  nav{display:flex;gap:22px;font-size:14px}
+  nav a{color:var(--muted)}
+  nav a:hover{color:var(--text);text-decoration:none}
+
+  /* ---------- hero ---------- */
+  .hero{padding:72px 0 56px}
+  .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{
+    font-family:var(--display);font-weight:800;
+    font-size:clamp(34px,5.4vw,58px);line-height:1.06;text-wrap:balance;
+    max-width:17ch;margin-bottom:22px;
+  }
+  h1 .dim{color:var(--muted);font-weight:500}
+  .lede{max-width:62ch;color:var(--muted);font-size:17.5px;margin-bottom:14px}
+  .lede b{color:var(--text);font-weight:600}
+  .hero-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
+  .btn{
+    display:inline-block;padding:10px 18px;border-radius:6px;font-size:14.5px;font-weight:600;
+    border:1px solid var(--line);color:var(--text);background:var(--surface);
+  }
+  .btn:hover{border-color:var(--accent-dim);text-decoration:none}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#08111E}
+  .btn.primary:hover{filter:brightness(1.08)}
+
+  /* ---------- pipeline strip ---------- */
+  .pipeline{overflow-x:auto;padding:8px 0 48px}
+  .pipe-row{display:flex;align-items:stretch;gap:0;min-width:860px}
+  .stage{
+    flex:1;background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    padding:14px 16px;position:relative;
+  }
+  .stage + .stage{margin-left:34px}
+  .stage + .stage::before{
+    content:"";position:absolute;left:-27px;top:50%;width:20px;height:2px;background:var(--accent-dim);
+  }
+  .stage + .stage::after{
+    content:"";position:absolute;left:-11px;top:50%;transform:translateY(-3.5px) rotate(45deg);
+    width:7px;height:7px;border-top:2px solid var(--accent-dim);border-right:2px solid var(--accent-dim);
+  }
+  .stage .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+  .stage h3{font-size:15px;font-weight:600;margin:4px 0 2px}
+  .stage p{font-size:12.5px;color:var(--muted);line-height:1.5}
+  .stage.loop{border-style:dashed;border-color:var(--accent-dim)}
+  .pipe-note{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px}
+  .pipe-note .ok{color:var(--ok)}
+
+  /* ---------- sections ---------- */
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  h2{
+    font-family:var(--display);font-weight:700;font-size:clamp(24px,3.2vw,32px);
+    margin-bottom:8px;text-wrap:balance;
+  }
+  .sub{color:var(--muted);max-width:64ch;margin-bottom:34px}
+
+  /* projects */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:22px;display:flex;flex-direction:column;gap:10px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .card:hover{border-color:var(--accent-dim);transform:translateY(-2px)}
+  @media (prefers-reduced-motion:reduce){.card,.card:hover{transition:none;transform:none}}
+  .repo{font-family:var(--mono);font-size:14.5px;font-weight:500;color:var(--text)}
+  .repo::before{content:"▸ ";color:var(--accent)}
+  .card p{font-size:14px;color:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+  .chip{
+    font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:99px;
+    border:1px solid var(--line);color:var(--muted);background:var(--ground);
+  }
+  .chip.ok{color:var(--ok);border-color:#245a44}
+  .card a.repo-link{font-size:13.5px;font-weight:600}
+
+  /* writing */
+  .posts{display:flex;flex-direction:column}
+  .post{
+    display:flex;justify-content:space-between;align-items:baseline;gap:24px;
+    padding:18px 4px;border-bottom:1px solid var(--line);
+  }
+  .post:first-child{border-top:1px solid var(--line)}
+  .post h3{font-size:16.5px;font-weight:600;max-width:56ch}
+  .post h3 a{color:var(--text)}
+  .post h3 a:hover{color:var(--accent);text-decoration:none}
+  .post .where{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+
+  /* capability matrix */
+  .matrix{width:100%;border-collapse:collapse;font-size:14px}
+  .matrix th,.matrix td{padding:12px 14px;border:1px solid var(--line);text-align:left;vertical-align:top}
+  .matrix th{
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);background:var(--surface);font-weight:500;
+  }
+  .matrix td:first-child{font-weight:600;white-space:nowrap;background:var(--surface)}
+  .matrix td{color:var(--muted)}
+  .matrix td b{color:var(--text);font-weight:600}
+  .matrix-scroll{overflow-x:auto}
+
+  /* experience */
+  .xp{display:flex;flex-direction:column;gap:26px;max-width:72ch}
+  .xp-item .role{font-weight:600;font-size:16.5px}
+  .xp-item .org{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:2px 0 8px}
+  .xp-item p{font-size:14.5px;color:var(--muted)}
+  .xp-item p b{color:var(--text);font-weight:600}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:48px 0 64px}
+  .foot-inner{display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;align-items:flex-start}
+  footer h2{font-size:24px}
+  .contact{font-size:15px;color:var(--muted);line-height:2}
+  .contact a{font-weight:600}
+  .fineprint{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:36px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand"><b>karthik@mlops</b>:~$ ship_models --safely</div>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#writing">Writing</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="kicker">MLOps · ML Platform · Agentic AI Infrastructure</div>
+    <h1>I build the machinery that gets models to production <span class="dim">— and keeps them honest once they're there.</span></h1>
+    <p class="lede">
+      I'm <b>Karthik Marimuthu</b> — a platform engineer with 12+ years in regulated financial
+      services, including 4+ years running production AI systems at the Royal Bank of Canada.
+      My work is the full model lifecycle: <b>CI/CD/CT pipelines</b>, <b>MLflow registries with
+      promotion gates</b>, <b>low-latency serving on Kubernetes</b>, and <b>drift monitoring
+      that triggers retraining</b> before customers notice decay.
+    </p>
+    <div class="hero-links">
+      <a class="btn primary" href="#projects">See the platform I built</a>
+      <a class="btn" href="https://github.com/KarthikTools">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/karthik-marimuthu-5416091ba/">LinkedIn</a>
+    </div>
+  </div>
+
+  <div class="pipeline" aria-label="The ML lifecycle loop this portfolio implements">
+    <div class="pipe-row">
+      <div class="stage">
+        <div class="tag">ci</div>
+        <h3>Train &amp; test</h3>
+        <p>Lint, unit tests, training smoke test on every PR</p>
+      </div>
+      <div class="stage">
+        <div class="tag">registry</div>
+        <h3>Gate &amp; promote</h3>
+        <p>Challenger must beat champion — or the pipeline fails loudly</p>
+      </div>
+      <div class="stage">
+        <div class="tag">cd</div>
+        <h3>Serve</h3>
+        <p>Hardened FastAPI on K8s: probes, HPA, zero-downtime rollout</p>
+      </div>
+      <div class="stage">
+        <div class="tag">monitor</div>
+        <h3>Watch for drift</h3>
+        <p>Evidently → Prometheus → Grafana, alerts with graduated severity</p>
+      </div>
+      <div class="stage loop">
+        <div class="tag">ct</div>
+        <h3>Retrain on drift</h3>
+        <p>Drift verdict re-enters the loop through the same gate</p>
+      </div>
+    </div>
+    <div class="pipe-note">$ make train &amp;&amp; make evaluate &amp;&amp; make drift <span class="ok">· 32 tests passing across the portfolio</span></div>
+  </div>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <p class="sub">Four repos, one system: the end-to-end lifecycle, the monitoring that watches it,
+    the infrastructure it runs on, and the same discipline applied to LLM applications.
+    Everything runs locally with zero cloud spend, and everything is tested.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="repo">credit-risk-mlops-platform</div>
+        <p>The flagship. Train → MLflow registry → champion/challenger promotion gate →
+        FastAPI serving → Kubernetes → nightly drift check that triggers retraining.
+        Three GitHub Actions pipelines: CI, CD, CT.</p>
+        <div class="chips">
+          <span class="chip ok">14 tests</span><span class="chip">MLflow</span><span class="chip">FastAPI</span>
+          <span class="chip">K8s</span><span class="chip">Evidently</span><span class="chip">Actions</span>
+        </div>
+        <a class="repo-link" href="https://github.com/KarthikTools/credit-risk-mlops-platform">View repo →</a>
+      </div>
+      <div class="card">
+        <div class="repo">model-drift-monitor</div>
+        <p>Model observability as a service: Evidently drift statistics exposed as Prometheus
+        metrics, Grafana dashboards, graduated alerts — plus a traffic simulator that lets you
+        watch a model decay in fast-forward.</p>
+        <div class="chips">
+          <span class="chip ok">7 tests</span><span class="chip">Evidently</span><span class="chip">Prometheus</span>
+          <span class="chip">Grafana</span><span class="chip">Docker</span>
+        </div>
+        <a class="repo-link" href="https://github.com/KarthikTools/model-drift-monitor">View repo →</a>
+      </div>
+      <div class="card">
+        <div class="repo">terraform-ml-platform-aws</div>
+        <p>Bank-grade ML infrastructure as code: VPC-isolated SageMaker and private EKS,
+        customer-managed KMS everywhere, least-privilege IAM, no internet egress path at all.
+        Checkov security scanning in CI.</p>
+        <div class="chips">
+          <span class="chip">Terraform</span><span class="chip">SageMaker</span><span class="chip">EKS</span>
+          <span class="chip">KMS</span><span class="chip">Checkov</span>
+        </div>
+        <a class="repo-link" href="https://github.com/KarthikTools/terraform-ml-platform-aws">View repo →</a>
+      </div>
+      <div class="card">
+        <div class="repo">llmops-eval-pipeline</div>
+        <p>Prompts are deployable artifacts. A versioned prompt registry with content hashing,
+        a hermetic eval harness, a regression gate on every PR, and canary rollout with
+        automatic rollback.</p>
+        <div class="chips">
+          <span class="chip ok">11 tests</span><span class="chip">Prompt registry</span>
+          <span class="chip">Evals</span><span class="chip">Canary</span>
+        </div>
+        <a class="repo-link" href="https://github.com/KarthikTools/llmops-eval-pipeline">View repo →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="writing">
+    <h2>Writing</h2>
+    <p class="sub">How I think about this discipline, in long form.</p>
+    <div class="posts">
+      <div class="post">
+        <h3><a href="MEDIUM_URL_1">From DevOps to MLOps: the mental model that made it click</a></h3>
+        <span class="where">medium · dev.to</span>
+      </div>
+      <div class="post">
+        <h3><a href="MEDIUM_URL_2">Anatomy of an end-to-end MLOps platform: CI, CD, and the CT loop everyone skips</a></h3>
+        <span class="where">medium · dev.to</span>
+      </div>
+      <div class="post">
+        <h3><a href="MEDIUM_URL_3">Your model is failing silently: drift monitoring with Evidently, Prometheus & Grafana</a></h3>
+        <span class="where">medium · dev.to</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities">
+    <h2>Capabilities</h2>
+    <p class="sub">What I do, and where the receipts are.</p>
+    <div class="matrix-scroll">
+      <table class="matrix">
+        <tr><th>Capability</th><th>Depth</th><th>Evidence</th></tr>
+        <tr>
+          <td>CI/CD/CT pipelines</td>
+          <td><b>Production + portfolio.</b> A decade of release automation for banking platforms; continuous-training pipelines with drift-gated retraining built end to end.</td>
+          <td>credit-risk-mlops-platform workflows; RBC & Virtusa delivery</td>
+        </tr>
+        <tr>
+          <td>Model serving</td>
+          <td><b>Production.</b> Low-latency FastAPI services on OpenShift/Kubernetes with probes, autoscaling, and rollback-safe rollouts — for LLM agents and classical models alike.</td>
+          <td>RBC agent platform; serving layer in flagship repo</td>
+        </tr>
+        <tr>
+          <td>Monitoring &amp; drift</td>
+          <td><b>Portfolio + production observability.</b> Built AI observability standards at RBC; drift detection with Evidently → Prometheus → Grafana built and demonstrated.</td>
+          <td>model-drift-monitor; CT trigger in flagship</td>
+        </tr>
+        <tr>
+          <td>Registries &amp; lineage</td>
+          <td><b>Portfolio.</b> MLflow tracking + registry with alias-based promotion; prompt registries with content-hash lineage for LLM systems.</td>
+          <td>flagship train/evaluate; llmops-eval-pipeline</td>
+        </tr>
+        <tr>
+          <td>Kubernetes &amp; containers</td>
+          <td><b>Production, deep.</b> Years of OpenShift/K8s: hardened images, NetworkPolicies, HPA, deployment standards adopted across teams.</td>
+          <td>RBC & Virtusa; k8s/ in flagship</td>
+        </tr>
+        <tr>
+          <td>Cloud security &amp; IaC</td>
+          <td><b>Production + portfolio.</b> Terraform/CloudFormation in regulated environments; VPC isolation, private endpoints, KMS, least-privilege IAM as code.</td>
+          <td>terraform-ml-platform-aws; RBC governance reviews</td>
+        </tr>
+        <tr>
+          <td>LLMOps &amp; agents</td>
+          <td><b>Production, deep.</b> Architected a bank's first production agentic AI platform: orchestration, evals, safety controls, HITL approval.</td>
+          <td>RBC FunctionsAssist; llmops-eval-pipeline</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="xp">
+      <div class="xp-item">
+        <div class="role">Lead Platform Engineer — AI Transformation</div>
+        <div class="org">Royal Bank of Canada · Toronto · 2022 – present</div>
+        <p>Architected <b>FunctionsAssist</b>, RBC's first agentic AI product to reach production —
+        a 3-tier orchestration platform (LangGraph, FastAPI, Kubernetes) adopted across multiple
+        business units. Owned serving architecture, CI/CD, observability standards, and the
+        safety controls (PII redaction, RBAC, human-in-the-loop) that carried it through
+        architecture, security, and governance review. Mentored 8 engineers.</p>
+      </div>
+      <div class="xp-item">
+        <div class="role">Senior DevOps Engineer</div>
+        <div class="org">Virtusa Consulting Services · 2016 – 2022</div>
+        <p>Distributed microservices for a wealth-management platform: <b>10M+ daily transactions,
+        99.9% uptime</b>. Cut deployment time 40% by redesigning CI/CD; built Python ML pipelines
+        that improved document-processing accuracy 45%. Star Award for DevOps automation.</p>
+      </div>
+      <div class="xp-item">
+        <div class="role">Software Developer</div>
+        <div class="org">HCL Technologies · 2014 – 2016</div>
+        <p>Monolith-to-microservices refactoring for insurance systems; high-volume SQL/NoSQL
+        optimization.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap foot-inner">
+    <div>
+      <h2>Let's talk.</h2>
+      <p class="contact">
+        <a href="mailto:ktkarthiktamil@gmail.com">ktkarthiktamil@gmail.com</a><br>
+        <a href="https://www.linkedin.com/in/karthik-marimuthu-5416091ba/">LinkedIn</a> ·
+        <a href="https://github.com/KarthikTools">GitHub</a><br>
+        Toronto, Canada · open to relocation (UAE)
+      </p>
+    </div>
+    <div class="fineprint">
+      $ uptime — 12y in production systems, 0 tolerance for silent failures<br>
+      Built by hand. No template.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
